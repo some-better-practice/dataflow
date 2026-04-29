@@ -1,8 +1,12 @@
-package com.alan.dataflow.tracking;
+package com.alan.dataflow.service;
 
 import com.alan.dataflow.domain.FileKey;
 import com.alan.dataflow.domain.JobStatus;
 import com.alan.dataflow.domain.ProcessingJob;
+import com.alan.dataflow.entity.JobRecord;
+import com.alan.dataflow.entity.JobStepLog;
+import com.alan.dataflow.repository.JobRecordRepository;
+import com.alan.dataflow.repository.JobStepLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

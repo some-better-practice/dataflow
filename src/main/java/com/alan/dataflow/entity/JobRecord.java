@@ -1,4 +1,4 @@
-package com.alan.dataflow.tracking;
+package com.alan.dataflow.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

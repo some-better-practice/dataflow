@@ -1,5 +1,6 @@
-package com.alan.dataflow.tracking;
+package com.alan.dataflow.repository;
 
+import com.alan.dataflow.entity.JobStepLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

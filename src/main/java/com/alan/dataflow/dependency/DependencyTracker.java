@@ -1,7 +1,7 @@
 package com.alan.dataflow.dependency;
 
 import com.alan.dataflow.event.DependencyReadyEvent;
-import com.alan.dataflow.tracking.JobTrackingService;
+import com.alan.dataflow.service.JobTrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

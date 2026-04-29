@@ -5,7 +5,7 @@ import com.alan.dataflow.domain.ProcessingJob;
 import com.alan.dataflow.event.StepCompletedEvent;
 import com.alan.dataflow.storage.StorageService;
 import com.alan.dataflow.storage.StorageZone;
-import com.alan.dataflow.tracking.JobTrackingService;
+import com.alan.dataflow.service.JobTrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
