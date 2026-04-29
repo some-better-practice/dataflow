@@ -11,6 +11,7 @@ import com.alan.dataflow.pipeline.parser.ParsedContent;
 import com.alan.dataflow.pipeline.parser.RawContent;
 import com.alan.dataflow.storage.StorageService;
 import com.alan.dataflow.storage.StorageZone;
+import com.alan.dataflow.tracking.JobTrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ public class CsvProcessingService {
     private final DependencyTracker dependencyTracker;
     private final StorageService storage;
     private final ApplicationEventPublisher eventPublisher;
+    private final JobTrackingService jobTrackingService;
 
     @Value("${dataflow.simulation.processing-delay-ms:1200}")
     private long delayMs;
@@ -67,6 +69,7 @@ public class CsvProcessingService {
                 job.getFileKey().toLogLabel());
 
         dependencyTracker.markCompleted(job.getJobId());
+        jobTrackingService.recordStep(job, JobStatus.PROCESSED);
         eventPublisher.publishEvent(new StepCompletedEvent(this, job, JobStatus.PROCESSED));
     }
 

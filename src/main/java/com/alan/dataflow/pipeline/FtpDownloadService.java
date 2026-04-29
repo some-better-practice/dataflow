@@ -5,6 +5,7 @@ import com.alan.dataflow.domain.ProcessingJob;
 import com.alan.dataflow.event.StepCompletedEvent;
 import com.alan.dataflow.storage.StorageService;
 import com.alan.dataflow.storage.StorageZone;
+import com.alan.dataflow.tracking.JobTrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ public class FtpDownloadService {
 
     private final StorageService storage;
     private final ApplicationEventPublisher eventPublisher;
+    private final JobTrackingService jobTrackingService;
 
     @Value("${dataflow.simulation.ftp-download-delay-ms:300}")
     private long delayMs;
@@ -45,6 +47,7 @@ public class FtpDownloadService {
 
         log.info("  ✓ [light-{}] DOWNLOAD  {} → ref={}", Thread.currentThread().getName(),
                 job.getFileKey().toLogLabel(), ref);
+        jobTrackingService.recordStep(job, JobStatus.DOWNLOADED);
         eventPublisher.publishEvent(new StepCompletedEvent(this, job, JobStatus.DOWNLOADED));
     }
 

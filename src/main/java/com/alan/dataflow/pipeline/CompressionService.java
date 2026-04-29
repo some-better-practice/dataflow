@@ -5,6 +5,7 @@ import com.alan.dataflow.domain.ProcessingJob;
 import com.alan.dataflow.event.StepCompletedEvent;
 import com.alan.dataflow.storage.StorageService;
 import com.alan.dataflow.storage.StorageZone;
+import com.alan.dataflow.tracking.JobTrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ public class CompressionService {
 
     private final StorageService storage;
     private final ApplicationEventPublisher eventPublisher;
+    private final JobTrackingService jobTrackingService;
 
     @Value("${dataflow.simulation.compression-delay-ms:150}")
     private long delayMs;
@@ -50,6 +52,7 @@ public class CompressionService {
         job.transition(JobStatus.COMPRESSED);
         log.info("  ✓ [light-{}] COMPRESS  {} → {}", Thread.currentThread().getName(),
                 job.getFileKey().toLogLabel(), compressedRef);
+        jobTrackingService.recordStep(job, JobStatus.COMPRESSED);
         eventPublisher.publishEvent(new StepCompletedEvent(this, job, JobStatus.COMPRESSED));
     }
 

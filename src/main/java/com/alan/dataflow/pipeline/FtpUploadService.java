@@ -3,6 +3,7 @@ package com.alan.dataflow.pipeline;
 import com.alan.dataflow.domain.JobStatus;
 import com.alan.dataflow.domain.ProcessingJob;
 import com.alan.dataflow.event.StepCompletedEvent;
+import com.alan.dataflow.tracking.JobTrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class FtpUploadService {
 
     private final ApplicationEventPublisher eventPublisher;
+    private final JobTrackingService jobTrackingService;
 
     @Value("${dataflow.simulation.upload-delay-ms:200}")
     private long delayMs;
@@ -46,6 +48,7 @@ public class FtpUploadService {
         job.getCheckpoints().forEach(cp -> log.info("    checkpoint: {}", cp));
         log.info("  ─────────────────────────────────────────────");
 
+        jobTrackingService.recordStep(job, JobStatus.DONE);
         eventPublisher.publishEvent(new StepCompletedEvent(this, job, JobStatus.DONE));
     }
 

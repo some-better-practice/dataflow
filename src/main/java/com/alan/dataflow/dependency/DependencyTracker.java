@@ -1,6 +1,7 @@
 package com.alan.dataflow.dependency;
 
 import com.alan.dataflow.event.DependencyReadyEvent;
+import com.alan.dataflow.tracking.JobTrackingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DependencyTracker {
 
     private final ApplicationEventPublisher eventPublisher;
+    private final JobTrackingService jobTrackingService;
 
     // completedJobId -> 所有等待它的 jobId
     private final Map<String, List<String>> waitMap = new ConcurrentHashMap<>();
@@ -48,6 +50,7 @@ public class DependencyTracker {
                 pendingCount.remove(waitingJobId);
                 log.info("  [DEPENDENCY] ✓ job {} unblocked (required {} completed)",
                         waitingJobId, completedJobId);
+                jobTrackingService.recordDependencyReady(waitingJobId);
                 eventPublisher.publishEvent(new DependencyReadyEvent(this, waitingJobId));
             }
         }
